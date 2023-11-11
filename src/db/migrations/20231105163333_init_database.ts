@@ -54,11 +54,23 @@ export async function up(knex: Knex): Promise<void> {
         .inTable("user")
         .onDelete("CASCADE")
     })
+    .createTable("budget", (table) => {
+      table.increments("id")
+      table.string("expense_type")
+      table.string("amount").notNullable()
+      table.integer("user_id").unsigned()
+      table
+        .foreign("user_id")
+        .references("id")
+        .inTable("user")
+        .onDelete("CASCADE")
+    })
 }
 
 
 export async function down(knex: Knex): Promise<void> {
   return knex.schema
+  .dropTableIfExists("budget")
   .dropTableIfExists("gift")
   .dropTableIfExists("gift_list")
   .dropTableIfExists("user")
